@@ -60,5 +60,29 @@ public class ModulatorP5 {
 		Oscillator newOsc = new Oscillator(parent, Oscillator.MIN_WAVE_OUTPUT, Oscillator.MAX_WAVE_OUTPUT, Oscillator.DEFAULT_RATE, Oscillator.MIN_AMOUNT, Oscillator.DEFAULT_MIN_RATE, Oscillator.DEFAULT_MAX_RATE);
 		return newOsc;
 	}
+	
+	// Min Range, Max Range
+	public Oscillator createOscillator(float minR_, float maxR_) {
+		Oscillator newOsc = new Oscillator(parent, minR_, maxR_, Oscillator.DEFAULT_RATE, Oscillator.MIN_AMOUNT, Oscillator.DEFAULT_MIN_RATE, Oscillator.DEFAULT_MAX_RATE);
+		return newOsc;
+	}
+  
+	// Min Range, Max Range, Starting Rate
+	public Oscillator createOscillator(float minR_, float maxR_, float rate_) {
+		Oscillator newOsc = new Oscillator(parent, minR_, maxR_, rate_, Oscillator.MIN_AMOUNT, Oscillator.DEFAULT_MIN_RATE, Oscillator.DEFAULT_MAX_RATE);
+		return newOsc;
+	}
+
+	// Min Range, Max Range, Starting Rate, Min Rate, Max Rate
+	public Oscillator createOscillator(float minR_, float maxR_, float rate_, float minRt_, float maxRt_) {
+		Oscillator newOsc = new Oscillator(parent, minR_, maxR_, rate_, Oscillator.MIN_AMOUNT, minRt_, maxRt_);
+		return newOsc;
+	}
+
+	// Min Range, Max Range, Starting Rate, Min Rate, Max Rate, Starting Amount
+	public Oscillator createOscillator(float minR_, float maxR_, float rate_, float minRt_, float maxRt_, float amount_) {
+		Oscillator newOsc = new Oscillator(parent, minR_, maxR_, rate_, amount_, minRt_, maxRt_);
+		return newOsc;
+	}
 }
 

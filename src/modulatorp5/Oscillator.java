@@ -33,11 +33,6 @@ public class Oscillator {
 	Oscillator(PApplet p_,float minR_, float maxR_) {
 		setup(p_, minR_, maxR_, DEFAULT_RATE, MIN_AMOUNT, DEFAULT_MIN_RATE, DEFAULT_MAX_RATE);
 	}
-  
-	// Min Range, Max Range, Starting Rate
-	Oscillator(PApplet p_, float minR_, float maxR_, float rate_) {
-		setup(p_, minR_, maxR_, rate_, MIN_AMOUNT, DEFAULT_MIN_RATE, DEFAULT_MAX_RATE);
-	}
 
 	// Min Range, Max Range, Starting Rate, Min Rate, Max Rate
 	Oscillator(PApplet p_, float minR_, float maxR_, float rate_, float minRt_, float maxRt_) {
@@ -60,52 +55,62 @@ public class Oscillator {
 		angle = DEFAULT_ANGLE;
 	}
 	
+	public void debug() {
+		parent.println("Oscillator: " + this + " minRange: " + minRange + " maxRange: " + maxRange + " rate: " + rate + " amount: " + "amount");
+	}
+	
 	public float getMinRate() {
 		return minRate;
 	}
 
-	public void setMinRate(float minRate) {
+	public Oscillator setMinRate(float minRate) {
 		this.minRate = minRate;
+		return this;
 	}
 
 	public float getMaxRate() {
 		return maxRate;
 	}
 
-	public void setMaxRate(float maxRate) {
+	public Oscillator setMaxRate(float maxRate) {
 		this.maxRate = maxRate;
+		return this;
 	}
 	
 	public float getMinRange() {
 		return minRange;
 	}
 
-	public void setMinRange(float minRange) {
+	public Oscillator setMinRange(float minRange) {
 		this.minRange = minRange;
+		return this;
 	}
 
 	public float getMaxRange() {
 		return maxRange;
 	}
 
-	public void setMaxRange(float maxRange) {
+	public Oscillator setMaxRange(float maxRange) {
 		this.maxRange = maxRange;
+		return this;
 	}
 
 	public float getRate() {
 		return parent.constrain(rate, minRate, maxRate);
 	}
 
-	public void setRate(float newRate) {
+	public Oscillator setRate(float newRate) {
 		rate = newRate;
+		return this;
 	}
 
 	public float getAmount() {
 		return parent.constrain(amount, MIN_AMOUNT, MAX_AMOUNT);
 	}
 
-	public void setAmount(float newAmount) {
+	public Oscillator setAmount(float newAmount) {
 		amount = newAmount;
+		return this;
 	}
 
 	public void oscillate() {
