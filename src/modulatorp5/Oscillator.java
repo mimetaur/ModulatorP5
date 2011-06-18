@@ -58,12 +58,6 @@ public class Oscillator {
 		minRate = minRt_;
 		maxRate = maxRt_;
 		angle = DEFAULT_ANGLE;
-		
-		debug();
-	}
-	
-	public void debug() {
-		parent.println("rate: " + rate + " amount: " + amount + " angle: " + angle);
 	}
 	
 	public float getMinRate() {
@@ -116,7 +110,6 @@ public class Oscillator {
 
 	public void oscillate() {
 		angle = angle + getRate();
-		debug();
 	}
 
 	public float output() {
