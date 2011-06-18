@@ -55,10 +55,6 @@ public class Oscillator {
 		angle = DEFAULT_ANGLE;
 	}
 	
-	public void debug() {
-		parent.println("Oscillator: " + this + " minRange: " + minRange + " maxRange: " + maxRange + " rate: " + rate + " amount: " + "amount");
-	}
-	
 	public float getMinRate() {
 		return minRate;
 	}
@@ -128,5 +124,9 @@ public class Oscillator {
 
 	private float scaledOutput() {
 		return waveOutput() * getAmount();
+	}
+	
+	public void debug() {
+		parent.println("Oscillator: " + this + " minRange: " + minRange + " maxRange: " + maxRange + " rate: " + rate + " amount: " + "amount");
 	}
 }

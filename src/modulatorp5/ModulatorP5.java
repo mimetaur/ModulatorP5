@@ -25,20 +25,8 @@
 
 package modulatorp5;
 
-
 import processing.core.*;
-
-/**
- * This is a template class and can be used to start a new processing library or tool.
- * Make sure you rename this class as well as the name of the example package 'template' 
- * to your own library or tool naming convention.
- * 
- * @example Hello 
- * 
- * (the tag @example followed by the name of an example included in folder 'examples' will
- * automatically include the example in the javadoc.)
- *
- */
+import java.util.ArrayList;
 
 public class ModulatorP5 {
 	
@@ -46,10 +34,22 @@ public class ModulatorP5 {
 	PApplet parent;
 	
 	public final static String VERSION = "##version##";
+	
+	private ArrayList<Oscillator> oscillators;
 
 	public ModulatorP5(PApplet theParent) {
 		parent = theParent;
+		parent.registerDraw(this);
+		
+		oscillators = new ArrayList<Oscillator>();
+		
 		welcomeMessage();
+	}
+	
+	public void draw() {
+		for (Oscillator o : oscillators) {
+			o.oscillate();
+		}
 	}
 	
 	private void welcomeMessage() {
@@ -58,30 +58,35 @@ public class ModulatorP5 {
 	
 	public Oscillator createOscillator() {
 		Oscillator newOsc = new Oscillator(parent, Oscillator.MIN_WAVE_OUTPUT, Oscillator.MAX_WAVE_OUTPUT, Oscillator.DEFAULT_RATE, Oscillator.MIN_AMOUNT, Oscillator.DEFAULT_MIN_RATE, Oscillator.DEFAULT_MAX_RATE);
+		oscillators.add(newOsc);
 		return newOsc;
 	}
 	
 	// Min Range, Max Range
 	public Oscillator createOscillator(float minR_, float maxR_) {
 		Oscillator newOsc = new Oscillator(parent, minR_, maxR_, Oscillator.DEFAULT_RATE, Oscillator.MIN_AMOUNT, Oscillator.DEFAULT_MIN_RATE, Oscillator.DEFAULT_MAX_RATE);
+		oscillators.add(newOsc);
 		return newOsc;
 	}
   
 	// Min Range, Max Range, Starting Rate
 	public Oscillator createOscillator(float minR_, float maxR_, float rate_) {
 		Oscillator newOsc = new Oscillator(parent, minR_, maxR_, rate_, Oscillator.MIN_AMOUNT, Oscillator.DEFAULT_MIN_RATE, Oscillator.DEFAULT_MAX_RATE);
+		oscillators.add(newOsc);
 		return newOsc;
 	}
 
 	// Min Range, Max Range, Starting Rate, Min Rate, Max Rate
 	public Oscillator createOscillator(float minR_, float maxR_, float rate_, float minRt_, float maxRt_) {
 		Oscillator newOsc = new Oscillator(parent, minR_, maxR_, rate_, Oscillator.MIN_AMOUNT, minRt_, maxRt_);
+		oscillators.add(newOsc);
 		return newOsc;
 	}
 
 	// Min Range, Max Range, Starting Rate, Min Rate, Max Rate, Starting Amount
 	public Oscillator createOscillator(float minR_, float maxR_, float rate_, float minRt_, float maxRt_, float amount_) {
 		Oscillator newOsc = new Oscillator(parent, minR_, maxR_, rate_, amount_, minRt_, maxRt_);
+		oscillators.add(newOsc);
 		return newOsc;
 	}
 }
