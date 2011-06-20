@@ -2,16 +2,16 @@ package modulatorp5;
 
 import processing.core.*;
 
-public class Oscillator {
+public class Oscillator<T extends Oscillator> {
 
-	private PApplet parent;
+	protected PApplet parent;
 	
-	private float minRange, maxRange;
-	private float minRate, maxRate;
+	protected float minRange, maxRange;
+	protected float minRate, maxRate;
 	
-	private float rate;
-	private float angle;
-	private float amount;
+	protected float rate;
+	protected float angle;
+	protected float amount;
 
 	public static final float MIN_AMOUNT = 0.0f;
 	public static final float MAX_AMOUNT = 1.0f;  
@@ -29,22 +29,7 @@ public class Oscillator {
 		setup(p_, MIN_WAVE_OUTPUT, MAX_WAVE_OUTPUT, DEFAULT_RATE, MIN_AMOUNT, DEFAULT_MIN_RATE, DEFAULT_MAX_RATE);
 	}
 	
-	// Min Range, Max Range
-	Oscillator(PApplet p_,float minR_, float maxR_) {
-		setup(p_, minR_, maxR_, DEFAULT_RATE, MIN_AMOUNT, DEFAULT_MIN_RATE, DEFAULT_MAX_RATE);
-	}
-
-	// Min Range, Max Range, Starting Rate, Min Rate, Max Rate
-	Oscillator(PApplet p_, float minR_, float maxR_, float rate_, float minRt_, float maxRt_) {
-		setup(p_, minR_, maxR_, rate_, MIN_AMOUNT, minRt_, maxRt_);
-	}
-
-	// Min Range, Max Range, Starting Rate, Min Rate, Max Rate, Starting Amount
-	Oscillator(PApplet p_, float minR_, float maxR_, float rate_, float minRt_, float maxRt_, float amount_) {
-		setup(p_, minR_, maxR_, rate_, amount_, minRt_, maxRt_);
-	}
-	
-	private void setup(PApplet p_, float minR_, float maxR_, float rate_, float amount_, float minRt_, float maxRt_) {
+	protected void setup(PApplet p_, float minR_, float maxR_, float rate_, float amount_, float minRt_, float maxRt_) {
 		parent = p_;
 		minRange = minR_;
 		maxRange = maxR_;
@@ -58,58 +43,58 @@ public class Oscillator {
 	public float getMinRate() {
 		return minRate;
 	}
-
-	public Oscillator setMinRate(float minRate) {
+	
+	public T setMinRate(float minRate) {
 		this.minRate = minRate;
-		return this;
+		return (T) this;
 	}
 
 	public float getMaxRate() {
 		return maxRate;
 	}
 
-	public Oscillator setMaxRate(float maxRate) {
+	public T setMaxRate(float maxRate) {
 		this.maxRate = maxRate;
-		return this;
+		return (T) this;
 	}
 	
 	public float getMinRange() {
 		return minRange;
 	}
 
-	public Oscillator setMinRange(float minRange) {
+	public T setMinRange(float minRange) {
 		this.minRange = minRange;
-		return this;
+		return (T) this;
 	}
 
 	public float getMaxRange() {
 		return maxRange;
 	}
 
-	public Oscillator setMaxRange(float maxRange) {
+	public T setMaxRange(float maxRange) {
 		this.maxRange = maxRange;
-		return this;
+		return (T) this;
 	}
 
 	public float getRate() {
 		return parent.constrain(rate, minRate, maxRate);
 	}
 
-	public Oscillator setRate(float newRate) {
+	public T setRate(float newRate) {
 		rate = newRate;
-		return this;
+		return (T) this;
 	}
 
 	public float getAmount() {
 		return parent.constrain(amount, MIN_AMOUNT, MAX_AMOUNT);
 	}
 
-	public Oscillator setAmount(float newAmount) {
+	public T setAmount(float newAmount) {
 		amount = newAmount;
-		return this;
+		return (T) this;
 	}
 
-	public void oscillate() {
+	public void advance() {
 		angle = angle + getRate();
 	}
 
@@ -117,12 +102,12 @@ public class Oscillator {
 		float mappedOutput = parent.map(scaledOutput(), MIN_WAVE_OUTPUT, MAX_WAVE_OUTPUT, minRange, maxRange);
 		return parent.constrain(mappedOutput, minRange, maxRange);
 	}
-
-	private float waveOutput() {
+	
+	protected float waveOutput() {
 		return parent.sin(angle);
 	}
 
-	private float scaledOutput() {
+	protected float scaledOutput() {
 		return waveOutput() * getAmount();
 	}
 	
