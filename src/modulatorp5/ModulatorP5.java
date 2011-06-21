@@ -35,20 +35,20 @@ public class ModulatorP5 {
 	
 	public final static String VERSION = "##version##";
 	
-	private ArrayList<Oscillator> oscillators;
+	private ArrayList<Modulator> allModulators;
 
 	public ModulatorP5(PApplet theParent) {
 		parent = theParent;
 		parent.registerDraw(this);
 		
-		oscillators = new ArrayList<Oscillator>();
+		allModulators = new ArrayList<Modulator>();
 		
 		welcomeMessage();
 	}
 	
 	public void draw() {
-		for (Oscillator o : oscillators) {
-			o.advance();
+		for (Modulator m : allModulators) {
+			m.advance();
 		}
 	}
 	
@@ -56,15 +56,15 @@ public class ModulatorP5 {
 		System.out.println("##name## ##version## by ##author##");
 	}
 	
-	public SineOscillator createSineOscillator() {
-		SineOscillator newOsc = new SineOscillator(parent);
-		oscillators.add(newOsc);
+	public SineWaveModulator createSineOscillator() {
+		SineWaveModulator newOsc = new SineWaveModulator(parent);
+		allModulators.add(newOsc);
 		return newOsc;
 	}
 	
-	public CosineOscillator createCosineOscillator() {
-		CosineOscillator newOsc = new CosineOscillator(parent);
-		oscillators.add(newOsc);
+	public CosineWaveModulator createCosineOscillator() {
+		CosineWaveModulator newOsc = new CosineWaveModulator(parent);
+		allModulators.add(newOsc);
 		return newOsc;
 	}
 }
