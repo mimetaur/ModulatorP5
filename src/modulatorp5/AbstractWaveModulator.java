@@ -2,7 +2,7 @@ package modulatorp5;
 
 import processing.core.*;
 
-abstract public class AbstractWaveModulator<T extends AbstractWaveModulator> implements WaveModulator {
+abstract public class AbstractWaveModulator<T extends AbstractWaveModulator> implements Oscillator {
 
 	protected PApplet parent;
 	

@@ -67,5 +67,11 @@ public class ModulatorP5 {
 		allModulators.add(newOsc);
 		return newOsc;
 	}
+	
+	public NoiseWaveModulator createNoiseOscillator() {
+		NoiseWaveModulator newOsc = new NoiseWaveModulator(parent);
+		allModulators.add(newOsc);
+		return newOsc;
+	}
 }
 
