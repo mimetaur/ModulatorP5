@@ -2,9 +2,9 @@ package modulatorp5;
 
 import processing.core.PApplet;
 
-public class SineWaveModulator extends AbstractWaveModulator<SineWaveModulator> {
+public class CosineOscillator extends AbstractOscillator<CosineOscillator> {
 	
-	public SineWaveModulator(PApplet p_) {
+	public CosineOscillator(PApplet p_) {
 		super(p_);
 	}
 	

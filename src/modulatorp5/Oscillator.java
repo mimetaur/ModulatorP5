@@ -1,6 +1,6 @@
 package modulatorp5;
 
-public interface Oscillator<T extends AbstractWaveModulator> extends Modulator {
+public interface Oscillator<T extends AbstractOscillator> extends Modulator {
 	static final float MIN_AMOUNT = 0.0f;
 	static final float MAX_AMOUNT = 1.0f;  
 		    

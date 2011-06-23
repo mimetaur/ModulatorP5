@@ -2,7 +2,7 @@ package modulatorp5;
 
 import processing.core.*;
 
-abstract public class AbstractWaveModulator<T extends AbstractWaveModulator> implements Oscillator {
+abstract public class AbstractOscillator<T extends AbstractOscillator> implements Oscillator {
 
 	protected PApplet parent;
 	
@@ -13,7 +13,7 @@ abstract public class AbstractWaveModulator<T extends AbstractWaveModulator> imp
 	protected float angle;
 	protected float amount;
 
-	public AbstractWaveModulator(PApplet p_) {
+	public AbstractOscillator(PApplet p_) {
 		setup(p_, MIN_WAVE_OUTPUT, MAX_WAVE_OUTPUT, DEFAULT_RATE, MIN_AMOUNT, DEFAULT_MIN_RATE, DEFAULT_MAX_RATE);
 	}
 	

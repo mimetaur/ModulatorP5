@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 public class ModulatorP5 {
 	
-	// myParent is a reference to the parent sketch
+	// parent is a reference to the parent sketch
 	PApplet parent;
 	
 	public final static String VERSION = "##version##";
@@ -56,20 +56,20 @@ public class ModulatorP5 {
 		System.out.println("##name## ##version## by ##author##");
 	}
 	
-	public SineWaveModulator createSineOscillator() {
-		SineWaveModulator newOsc = new SineWaveModulator(parent);
+	public SineOscillator createSineOscillator() {
+		SineOscillator newOsc = new SineOscillator(parent);
 		allModulators.add(newOsc);
 		return newOsc;
 	}
 	
-	public CosineWaveModulator createCosineOscillator() {
-		CosineWaveModulator newOsc = new CosineWaveModulator(parent);
+	public CosineOscillator createCosineOscillator() {
+		CosineOscillator newOsc = new CosineOscillator(parent);
 		allModulators.add(newOsc);
 		return newOsc;
 	}
 	
-	public NoiseWaveModulator createNoiseOscillator() {
-		NoiseWaveModulator newOsc = new NoiseWaveModulator(parent);
+	public NoiseOscillator createNoiseOscillator() {
+		NoiseOscillator newOsc = new NoiseOscillator(parent);
 		allModulators.add(newOsc);
 		return newOsc;
 	}

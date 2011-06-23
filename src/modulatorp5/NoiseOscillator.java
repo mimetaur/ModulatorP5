@@ -2,9 +2,9 @@ package modulatorp5;
 
 import processing.core.PApplet;
 
-public class NoiseWaveModulator extends AbstractWaveModulator {
+public class NoiseOscillator extends AbstractOscillator {
 
-	public NoiseWaveModulator(PApplet p_) {
+	public NoiseOscillator(PApplet p_) {
 		super(p_);
 	}
 	
