@@ -27,11 +27,13 @@ package modulatorp5;
 
 import processing.core.*;
 import java.util.ArrayList;
+import controlP5.*;
 
 public class ModulatorP5 {
 	
 	// parent is a reference to the parent sketch
 	PApplet parent;
+	ControlP5 controlP5;
 	
 	public final static String VERSION = "##version##";
 	
@@ -40,7 +42,16 @@ public class ModulatorP5 {
 	public ModulatorP5(PApplet theParent) {
 		parent = theParent;
 		parent.registerDraw(this);
+		controlP5 = new ControlP5(parent);
+		allModulators = new ArrayList<Modulator>();
 		
+		welcomeMessage();
+	}
+	
+	public ModulatorP5(PApplet theParent, ControlP5 controlP5_) {
+		parent = theParent;
+		parent.registerDraw(this);
+		controlP5 = controlP5_;
 		allModulators = new ArrayList<Modulator>();
 		
 		welcomeMessage();
@@ -72,6 +83,21 @@ public class ModulatorP5 {
 		NoiseOscillator newOsc = new NoiseOscillator(parent);
 		allModulators.add(newOsc);
 		return newOsc;
+	}
+	
+	public OscillatorControlPanel createControlPanel(Oscillator oscillator) {
+		OscillatorControlPanel cp = new OscillatorControlPanel(parent, controlP5, oscillator);
+		return cp;
+	}
+	
+	public OscillatorControlPanel createControlPanel(int x, int y, Oscillator oscillator) {
+		OscillatorControlPanel cp = new OscillatorControlPanel(parent, controlP5, x, y, oscillator);
+		return cp;
+	}
+	
+	public OscillatorControlPanel createControlPanel(int x, int y, String name, Oscillator oscillator) {
+		OscillatorControlPanel cp = new OscillatorControlPanel(parent, controlP5, x, y, name, oscillator);
+		return cp;	
 	}
 }
 
