@@ -28,12 +28,15 @@ package modulatorp5;
 import processing.core.*;
 import java.util.ArrayList;
 import controlP5.*;
+import ddf.minim.*;
 
 public class ModulatorP5 {
 	
 	// parent is a reference to the parent sketch
 	PApplet parent;
 	ControlP5 controlP5;
+	Minim minim;
+	AudioInput in;
 	
 	public final static String VERSION = "##version##";
 	
@@ -43,8 +46,18 @@ public class ModulatorP5 {
 		parent = theParent;
 		parent.registerDraw(this);
 		controlP5 = new ControlP5(parent);
+		minim = new Minim(parent);
+		in = minim.getLineIn();
 		allModulators = new ArrayList<Modulator>();
-		
+		welcomeMessage();
+	}
+	
+	public ModulatorP5(PApplet theParent, Minim minim_, AudioInput in_) {
+		parent = theParent;
+		parent.registerDraw(this);
+		minim = minim_;
+		in = in_;
+		allModulators = new ArrayList<Modulator>();
 		welcomeMessage();
 	}
 	
@@ -52,8 +65,19 @@ public class ModulatorP5 {
 		parent = theParent;
 		parent.registerDraw(this);
 		controlP5 = controlP5_;
+		minim = new Minim(parent);
+		in = minim.getLineIn();
 		allModulators = new ArrayList<Modulator>();
-		
+		welcomeMessage();
+	}
+	
+	public ModulatorP5(PApplet theParent, ControlP5 controlP5_, Minim minim_, AudioInput in_) {
+		parent = theParent;
+		parent.registerDraw(this);
+		controlP5 = controlP5_;
+		minim = minim_;
+		in = in_;
+		allModulators = new ArrayList<Modulator>();
 		welcomeMessage();
 	}
 	
@@ -98,6 +122,27 @@ public class ModulatorP5 {
 	public OscillatorControlPanel createControlPanel(int x, int y, String name, Oscillator oscillator) {
 		OscillatorControlPanel cp = new OscillatorControlPanel(parent, controlP5, x, y, name, oscillator);
 		return cp;	
+	}
+	
+	public AudioAnalyzerControlPanel createControlPanel(AudioAnalyzer audioAnalyzer) {
+		AudioAnalyzerControlPanel cp = new AudioAnalyzerControlPanel(parent, controlP5, audioAnalyzer);
+		return cp;
+	}
+	
+	public AudioAnalyzerControlPanel createControlPanel(int x, int y, AudioAnalyzer audioAnalyzer) {
+		AudioAnalyzerControlPanel cp = new AudioAnalyzerControlPanel(parent, controlP5, x, y, audioAnalyzer);
+		return cp;
+	}
+	
+	public AudioAnalyzerControlPanel createControlPanel(int x, int y, String name, AudioAnalyzer audioAnalyzer) {
+		AudioAnalyzerControlPanel cp = new AudioAnalyzerControlPanel(parent, controlP5, x, y, name, audioAnalyzer);
+		return cp;	
+	}
+	
+	public AudioAnalyzer createAudioAnalyzer() {
+		AudioAnalyzer newAnalyzer = new AudioAnalyzer(parent, minim, in);
+		allModulators.add(newAnalyzer);
+		return newAnalyzer;
 	}
 }
 

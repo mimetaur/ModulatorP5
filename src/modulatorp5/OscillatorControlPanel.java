@@ -1,7 +1,5 @@
 package modulatorp5;
 
-import java.util.ArrayList;
-
 import processing.core.PApplet;
 import controlP5.*;
 
@@ -44,14 +42,14 @@ public class OscillatorControlPanel implements ControlPanel {
 	}
 	
 	public void addInitialControls() {
-		addSlider("rateSlider", oscillator.getMinRate(), oscillator.getMaxRate(), oscillator.getRate());
-		addSlider("amountSlider", oscillator.MIN_AMOUNT, oscillator.MAX_AMOUNT, oscillator.getAmount());
+		addSlider("rateSlider", oscillator.getMinRate(), oscillator.getMaxRate(), oscillator.getRate(), "Rate");
+		addSlider("amountSlider", oscillator.MIN_AMOUNT, oscillator.MAX_AMOUNT, oscillator.getAmount(), "Amount");
 	}
 	
-	public Slider addSlider(String name, float minVal, float maxVal, float curVal) {
+	public Slider addSlider(String name, float minVal, float maxVal, float curVal, String label) {
 		Slider slider = controlP5.addSlider(name, minVal, maxVal, curVal, 0, yCursor, SLIDER_WIDTH, SLIDER_HEIGHT);
 		advanceCursorForSlider();
-		slider.setLabel(controlGroup.name() + " " + name);
+		slider.setLabel(label);
 		slider.setGroup(controlGroup.name());
 		slider.plugTo(this);
 		return slider;

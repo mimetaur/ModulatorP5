@@ -12,11 +12,8 @@ public interface ControlPanel {
 	
 	public void addInitialControls();
 	
-	public Slider addSlider(String name, float minVal, float maxVal, float curVal);
+	public Slider addSlider(String name, float minVal, float maxVal, float curVal, String label);
 	
 	public void advanceCursorForSlider();
 	
-	public void rateSlider(float newRate);
-	
-	public void amountSlider(float newAmount);
 }
