@@ -6,14 +6,8 @@ public interface ControlPanel {
 	
 	public static final int SLIDER_WIDTH = 200;
 	public static final int SLIDER_HEIGHT = 20;
-	public static final int SLIDER_VERTICAL_SPACER = 12;
+	public static final int VERTICAL_SPACER = 12;
 	
 	public void buildInterface();
-	
 	public void addInitialControls();
-	
-	public Slider addSlider(String name, float minVal, float maxVal, float curVal, String label);
-	
-	public void advanceCursorForSlider();
-	
 }

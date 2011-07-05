@@ -28,13 +28,17 @@ public class OscillatorControlPanel implements ControlPanel {
 		controlP5 = controlP5_;
 		x = x_;
 		y = y_;
-		yCursor = 0;
+		yCursor = VERTICAL_SPACER;
 		groupName = groupName_;
 		
 		oscillator = oscillator_;
 		
 		buildInterface();
 		addInitialControls();
+	}
+	
+	public int getHeight() {
+		return controlGroup.getHeight();
 	}
 	
 	public void buildInterface() {
@@ -56,7 +60,7 @@ public class OscillatorControlPanel implements ControlPanel {
 	}
 	
 	public void advanceCursorForSlider() {
-		yCursor = yCursor + (SLIDER_HEIGHT + SLIDER_VERTICAL_SPACER);
+		yCursor = yCursor + (SLIDER_HEIGHT + VERTICAL_SPACER);
 	}
 	
 	public void rateSlider(float newRate) {

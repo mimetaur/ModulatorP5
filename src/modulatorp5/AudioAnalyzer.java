@@ -20,11 +20,13 @@ public class AudioAnalyzer implements Modulator {
 	
 	public static final float DEFAULT_SENSITIVITY = 1.0f;
 	
-	public static final int MODE_LOW = 0;
-	public static final int MODE_MID = 1;
-	public static final int MODE_HIGH = 2;
+	public static final int MODE_SUB = 0;
+	public static final int MODE_BASS = 1;
+	public static final int MODE_MIDS = 2;
+	public static final int MODE_HIGHS = 3;
+	public static final int MODE_DEFAULT = MODE_BASS;
 	
-	public static final float MAX_SCALE = 1.0f;
+	public static final float MAX_SCALE = 1.5f;
 	public static final float MIN_SCALE = 0.0f;
 	
 	protected PApplet parent;
@@ -54,7 +56,7 @@ public class AudioAnalyzer implements Modulator {
 		band = MIN_AVG_BAND;
 		minRange = DEFAULT_MIN_RANGE;
 		maxRange = DEFAULT_MAX_RANGE;
-		mode = MODE_HIGH;
+		mode = MODE_DEFAULT;
 		scale = MIN_SCALE;
 	}
 		
@@ -72,7 +74,7 @@ public class AudioAnalyzer implements Modulator {
 	}
 
 	public AudioAnalyzer setMode(int mode) {
-		this.mode = parent.constrain(mode, MODE_LOW, MODE_HIGH);
+		this.mode = parent.constrain(mode, MODE_SUB, MODE_HIGHS);
 		return this;
 	}
 
@@ -138,13 +140,16 @@ public class AudioAnalyzer implements Modulator {
 	protected float calculateUpperLimit() {
 		float limit = 1.0f;
 		switch(mode) {
-			case MODE_LOW:
+			case MODE_SUB:
 				limit = 20.0f;
 				break;
-			case MODE_MID:
+			case MODE_BASS:
+				limit = 20.0f;
+				break;
+			case MODE_MIDS:
 				limit = 2.0f;
 				break;
-			case MODE_HIGH:
+			case MODE_HIGHS:
 				limit = 0.8f;
 				break;
 		}
@@ -154,13 +159,16 @@ public class AudioAnalyzer implements Modulator {
 	protected float calculateAverage() {
 		float average = 0.0f;
 		switch (mode) {
-			case MODE_LOW:  
-				average = fft.calcAvg(20, 250); 
+			case MODE_SUB:
+				average = fft.calcAvg(20,80);
 				break;
-			case MODE_MID: 
+			case MODE_BASS:  
+				average = fft.calcAvg(80, 250); 
+				break;
+			case MODE_MIDS: 
 				average = fft.calcAvg(250, 5000);
 				break;
-			case MODE_HIGH:
+			case MODE_HIGHS:
 				average = fft.calcAvg(5000, 14000);
 				break;
 		}
