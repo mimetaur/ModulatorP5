@@ -42,9 +42,8 @@ public class AudioAnalyzerControlPanel implements ControlPanel {
 	}
 	
 	public void addInitialControls() {
-		addSlider("bandSlider", AudioAnalyzer.MIN_AVG_BAND, audioAnalyzer.getMaxAvgBand(), audioAnalyzer.getBand(), "Freq Band");
 		addSlider("easingSlider", AudioAnalyzer.MIN_EASING, AudioAnalyzer.MAX_EASING, audioAnalyzer.getEasing(), "Easing");
-		addSlider("sensitivitySlider", 0.0f, 100.0f, audioAnalyzer.getSensitivity(), "Sensitivity");
+		addSlider("scaleSlider", AudioAnalyzer.MIN_SCALE, AudioAnalyzer.MAX_SCALE, audioAnalyzer.getScale(), "Amount");
 	}
 	
 	public Slider addSlider(String name, float minVal, float maxVal, float curVal, String label) {
@@ -56,10 +55,6 @@ public class AudioAnalyzerControlPanel implements ControlPanel {
 		return slider;
 	}
 	
-	public void bandSlider(int newValue) {
-		audioAnalyzer.setBand(newValue);
-	}
-	
 	public void advanceCursorForSlider() {
 		yCursor = yCursor + (SLIDER_HEIGHT + SLIDER_VERTICAL_SPACER);
 	}
@@ -68,7 +63,7 @@ public class AudioAnalyzerControlPanel implements ControlPanel {
 		audioAnalyzer.setEasing(newValue);
 	}
 	
-	public void sensitivitySlider(float newValue) {
-		audioAnalyzer.setSensitivity(newValue);
+	public void scaleSlider(float newValue) {
+		audioAnalyzer.setScale(newValue);
 	}
 }

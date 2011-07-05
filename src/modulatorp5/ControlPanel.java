@@ -6,7 +6,7 @@ public interface ControlPanel {
 	
 	public static final int SLIDER_WIDTH = 200;
 	public static final int SLIDER_HEIGHT = 20;
-	public static final int SLIDER_VERTICAL_SPACER = new Float(SLIDER_HEIGHT * 0.66).intValue();
+	public static final int SLIDER_VERTICAL_SPACER = 12;
 	
 	public void buildInterface();
 	

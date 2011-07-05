@@ -6,19 +6,26 @@ import processing.core.*;
 
 public class AudioAnalyzer implements Modulator {
 	
-	public static final int INPUT_SAMPLE_RATE = 22050;
+	public static final int INPUT_SAMPLE_RATE = 44100;
 	
 	public static final int MIN_AVG_BAND = 1;
 	
 	public static final float MIN_EASING = 0.01f;
-	public static final float MAX_EASING = 0.2f;
-	public static final float DEFAULT_EASING = 0.05f;
+	public static final float MAX_EASING = 0.5f;
+	public static final float DEFAULT_EASING = 0.1f;
 	
 	public static final float DEFAULT_OUTPUT = 0.0f;
 	public static final float DEFAULT_MIN_RANGE = 0.0f;
 	public static final float DEFAULT_MAX_RANGE = 1.0f;
 	
 	public static final float DEFAULT_SENSITIVITY = 1.0f;
+	
+	public static final int MODE_LOW = 0;
+	public static final int MODE_MID = 1;
+	public static final int MODE_HIGH = 2;
+	
+	public static final float MAX_SCALE = 1.0f;
+	public static final float MIN_SCALE = 0.0f;
 	
 	protected PApplet parent;
 	protected Minim minim;
@@ -29,7 +36,9 @@ public class AudioAnalyzer implements Modulator {
 	protected float minRange, maxRange;
 	protected int band;
 	protected float output, nextOutput;
-	protected float sensitivity;
+	protected int mode;
+	protected int minBand, maxBand;
+	protected float scale;
 
 	public AudioAnalyzer(PApplet parent_, Minim minim_, AudioInput in_) {
 		parent = parent_;
@@ -45,9 +54,28 @@ public class AudioAnalyzer implements Modulator {
 		band = MIN_AVG_BAND;
 		minRange = DEFAULT_MIN_RANGE;
 		maxRange = DEFAULT_MAX_RANGE;
-		sensitivity = DEFAULT_SENSITIVITY;
+		mode = MODE_HIGH;
+		scale = MIN_SCALE;
 	}
-	
+		
+	public float getScale() {
+		return scale;
+	}
+
+	public AudioAnalyzer setScale(float newScale) {
+		this.scale = parent.constrain(newScale, MIN_SCALE, MAX_SCALE);
+		return this;
+	}
+
+	public int getMode() {
+		return mode;
+	}
+
+	public AudioAnalyzer setMode(int mode) {
+		this.mode = parent.constrain(mode, MODE_LOW, MODE_HIGH);
+		return this;
+	}
+
 	public float getMaxAvgBand() {
 		return (fft.avgSize() - 1);
 	}
@@ -58,15 +86,6 @@ public class AudioAnalyzer implements Modulator {
 
 	public AudioAnalyzer setBand(int band) {
 		this.band = band;
-		return this;
-	}
-
-	public float getSensitivity() {
-		return sensitivity;
-	}
-
-	public AudioAnalyzer setSensitivity(float sensitivity) {
-		this.sensitivity = sensitivity;
 		return this;
 	}
 
@@ -103,11 +122,49 @@ public class AudioAnalyzer implements Modulator {
 	}
 	
 	protected void analyze() {
-		float raw = fft.getAvg(band);
-		float constrained = parent.constrain(raw, 0.0f, 30.0f);
-		parent.println("Raw: " + raw + " Constrained: " + constrained);
-		nextOutput = parent.map(constrained, 0, 30.0f, minRange, maxRange);
+		float raw = calculateAverage();
+		float limit = calculateUpperLimit();
+
+		float constrained = parent.constrain(raw, 0.0f, limit);
+		float scaled = scaleFFTOutput(constrained);
+		nextOutput = parent.map(scaled, 0.0f, limit, minRange, maxRange);
 		calculateDiff();
+	}
+	
+	protected float scaleFFTOutput(float value) {
+		return value * getScale();
+	}
+	
+	protected float calculateUpperLimit() {
+		float limit = 1.0f;
+		switch(mode) {
+			case MODE_LOW:
+				limit = 20.0f;
+				break;
+			case MODE_MID:
+				limit = 2.0f;
+				break;
+			case MODE_HIGH:
+				limit = 0.8f;
+				break;
+		}
+		return limit;
+	}
+	
+	protected float calculateAverage() {
+		float average = 0.0f;
+		switch (mode) {
+			case MODE_LOW:  
+				average = fft.calcAvg(20, 250); 
+				break;
+			case MODE_MID: 
+				average = fft.calcAvg(250, 5000);
+				break;
+			case MODE_HIGH:
+				average = fft.calcAvg(5000, 14000);
+				break;
+		}
+		return average;
 	}
 	
 	protected void calculateDiff() {
