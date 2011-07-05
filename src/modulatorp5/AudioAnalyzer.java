@@ -8,8 +8,7 @@ public class AudioAnalyzer implements Modulator {
 	
 	public static final int INPUT_SAMPLE_RATE = 22050;
 	
-	public static final float MIN_FREQ_BAND = 20.0f;
-	public static final float MAX_FREQ_BAND = 5000.0f;
+	public static final int MIN_AVG_BAND = 1;
 	
 	public static final float MIN_EASING = 0.01f;
 	public static final float MAX_EASING = 0.2f;
@@ -18,8 +17,8 @@ public class AudioAnalyzer implements Modulator {
 	public static final float DEFAULT_OUTPUT = 0.0f;
 	public static final float DEFAULT_MIN_RANGE = 0.0f;
 	public static final float DEFAULT_MAX_RANGE = 1.0f;
-	public static final float DEFAULT_LOW_BAND = 500.0f;
-	public static final float DEFAULT_HIGH_BAND = 600.0f;
+	
+	public static final float DEFAULT_SENSITIVITY = 1.0f;
 	
 	protected PApplet parent;
 	protected Minim minim;
@@ -28,7 +27,7 @@ public class AudioAnalyzer implements Modulator {
 	
 	protected float easing;
 	protected float minRange, maxRange;
-	protected float lowBand, highBand;
+	protected int band;
 	protected float output, nextOutput;
 	protected float sensitivity;
 
@@ -38,19 +37,30 @@ public class AudioAnalyzer implements Modulator {
 		in = in_;
 		
 		fft = new FFT(in.bufferSize(), INPUT_SAMPLE_RATE);
+		fft.logAverages(22, 3);
 		
 		output = DEFAULT_OUTPUT;
 		nextOutput = DEFAULT_OUTPUT;
 		easing = DEFAULT_EASING;
-		lowBand = DEFAULT_LOW_BAND;
-		highBand = DEFAULT_HIGH_BAND;
+		band = MIN_AVG_BAND;
 		minRange = DEFAULT_MIN_RANGE;
 		maxRange = DEFAULT_MAX_RANGE;
-		sensitivity = 1.0f;
+		sensitivity = DEFAULT_SENSITIVITY;
 	}
 	
+	public float getMaxAvgBand() {
+		return (fft.avgSize() - 1);
+	}
 	
-	
+	public int getBand() {
+		return band;
+	}
+
+	public AudioAnalyzer setBand(int band) {
+		this.band = band;
+		return this;
+	}
+
 	public float getSensitivity() {
 		return sensitivity;
 	}
@@ -87,42 +97,21 @@ public class AudioAnalyzer implements Modulator {
 		return this;
 	}
 
-	public float getLowBand() {
-		return lowBand;
-	}
-
-	public AudioAnalyzer setLowBand(float lowBand) {
-		this.lowBand = parent.constrain(lowBand, MIN_FREQ_BAND, MAX_FREQ_BAND);
-		return this;
-	}
-
-	public float getHighBand() {
-		return highBand;
-	}
-
-	public AudioAnalyzer setHighBand(float highBand) {
-		this.highBand = parent.constrain(highBand, MIN_FREQ_BAND, MAX_FREQ_BAND);
-		return this;
-	}
-
 	public void advance() {
 		fft.forward(in.mix);
 		analyze();
-		parent.println("Output: " + output);
 	}
 	
 	protected void analyze() {
-		float raw = fft.calcAvg(lowBand, highBand) * sensitivity;
-		parent.println("Raw: " + raw);
-		parent.println("Min: " + minRange + " Max: " + maxRange);
-		nextOutput = parent.constrain(raw, minRange, maxRange);
-		parent.println("nextOutput: " + nextOutput);
+		float raw = fft.getAvg(band);
+		float constrained = parent.constrain(raw, 0.0f, 30.0f);
+		parent.println("Raw: " + raw + " Constrained: " + constrained);
+		nextOutput = parent.map(constrained, 0, 30.0f, minRange, maxRange);
 		calculateDiff();
 	}
 	
 	protected void calculateDiff() {
 		float diff = nextOutput - output;
-		parent.println("Diff: " + diff);
 		if (parent.abs(diff) > 1.0f) {
 			output += diff * easing;
 		}
