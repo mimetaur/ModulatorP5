@@ -3,7 +3,7 @@ package modulatorp5;
 import processing.core.PApplet;
 import controlP5.*;
 
-public class OscillatorControlPanel implements ControlPanel {
+public class OscillatorControlPanel implements ControlPanel, ControlListener {
 	
 	private PApplet parent;
 	private ControlP5 controlP5;
@@ -15,6 +15,9 @@ public class OscillatorControlPanel implements ControlPanel {
 	
 	Oscillator oscillator;
 	
+	public static final int RATE_SLIDER_ID = 1;
+	public static final int AMOUNT_SLIDER_ID = 2;
+
 	OscillatorControlPanel(PApplet parent_, ControlP5 controlP5_, Oscillator oscillator_) {
 		this(parent_, controlP5_, 0, 0, "Entity", oscillator_);
 	}
@@ -46,16 +49,18 @@ public class OscillatorControlPanel implements ControlPanel {
 	}
 	
 	public void addInitialControls() {
-		addSlider("rateSlider", oscillator.getMinRate(), oscillator.getMaxRate(), oscillator.getRate(), "Rate");
-		addSlider("amountSlider", oscillator.MIN_AMOUNT, oscillator.MAX_AMOUNT, oscillator.getAmount(), "Amount");
+		addSlider("rateSlider", oscillator.getMinRate(), oscillator.getMaxRate(), oscillator.getRate(), "Rate", RATE_SLIDER_ID);
+		addSlider("amountSlider", oscillator.MIN_AMOUNT, oscillator.MAX_AMOUNT, oscillator.getAmount(), "Amount", AMOUNT_SLIDER_ID);
 	}
 	
-	public Slider addSlider(String name, float minVal, float maxVal, float curVal, String label) {
-		Slider slider = controlP5.addSlider(name, minVal, maxVal, curVal, 0, yCursor, SLIDER_WIDTH, SLIDER_HEIGHT);
-		advanceCursorForSlider();
+	public Slider addSlider(String name, float minVal, float maxVal, float curVal, String label, int id) {
+		String uniqueName = name + this.hashCode();
+		Slider slider = controlP5.addSlider(uniqueName, minVal, maxVal, curVal, 0, yCursor, SLIDER_WIDTH, SLIDER_HEIGHT);
 		slider.setLabel(label);
 		slider.setGroup(controlGroup.name());
-		slider.plugTo(this);
+		slider.setId(id);
+		slider.addListener(this);
+		advanceCursorForSlider();
 		return slider;
 	}
 	
@@ -63,12 +68,18 @@ public class OscillatorControlPanel implements ControlPanel {
 		yCursor = yCursor + (SLIDER_HEIGHT + VERTICAL_SPACER);
 	}
 	
-	public void rateSlider(float newRate) {
-		oscillator.setRate(newRate);
-	}
-	
-	public void amountSlider(float newAmount) {
-		oscillator.setAmount(newAmount);
+	public void controlEvent(ControlEvent event) {
+		int controllerId = event.controller().id();
+		float controllerValue = event.controller().value();
+
+		switch (controllerId) {
+		case RATE_SLIDER_ID:
+			oscillator.setRate(controllerValue);
+			break;
+		case AMOUNT_SLIDER_ID:
+			oscillator.setAmount(controllerValue);
+			break;
+		}
 	}
 	
 }
