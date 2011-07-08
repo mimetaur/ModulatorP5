@@ -3,7 +3,7 @@ package modulatorp5;
 import processing.core.PApplet;
 import controlP5.*;
 
-public class AudioAnalyzerControlPanel implements ControlPanel {
+public class AudioAnalyzerControlPanel implements ControlPanel, ControlListener {
 
 	private PApplet parent;
 	private ControlP5 controlP5;
@@ -12,6 +12,10 @@ public class AudioAnalyzerControlPanel implements ControlPanel {
 	private String groupName;
 	
 	private ControlGroup controlGroup;
+	
+	private static final int MODE_BUTTONS_ID = 1;
+	private static final int EASING_SLIDER_ID = 2;
+	private static final int SCALE_SLIDER_ID = 3;
 	
 	AudioAnalyzer audioAnalyzer;
 	
@@ -45,30 +49,34 @@ public class AudioAnalyzerControlPanel implements ControlPanel {
 	}
 	
 	public void addInitialControls() {
-		addModeButtons("modeButtons", "Mode");
-		addSlider("easingSlider", AudioAnalyzer.MIN_EASING, AudioAnalyzer.MAX_EASING, audioAnalyzer.getEasing(), "Easing");
-		addSlider("scaleSlider", AudioAnalyzer.MIN_SCALE, AudioAnalyzer.MAX_SCALE, audioAnalyzer.getScale(), "Amount");
+		addModeButtons("modeButtons", "Mode", MODE_BUTTONS_ID);
+		addSlider("easingSlider", AudioAnalyzer.MIN_EASING, AudioAnalyzer.MAX_EASING, audioAnalyzer.getEasing(), "Easing", EASING_SLIDER_ID);
+		addSlider("scaleSlider", AudioAnalyzer.MIN_SCALE, AudioAnalyzer.MAX_SCALE, audioAnalyzer.getScale(), "Amount", SCALE_SLIDER_ID);
 	}
 	
-	public Radio addModeButtons(String name, String label) {
-		Radio radio = controlP5.addRadio(name, 0, yCursor);
+	public Radio addModeButtons(String name, String label, int id) {
+		String uniqueName = name + this.hashCode();
+		Radio radio = controlP5.addRadio(uniqueName, 0, yCursor);
 		radio.add("Sub", AudioAnalyzer.MODE_SUB);
 		radio.add("Bass", AudioAnalyzer.MODE_BASS);
 		radio.add("Mids", AudioAnalyzer.MODE_MIDS);
 		radio.add("Highs", AudioAnalyzer.MODE_HIGHS);
-		radio.plugTo(this);
 		radio.setDefaultValue(AudioAnalyzer.MODE_DEFAULT);
 		radio.setLabel(label);
 		radio.setGroup(controlGroup.name());
+		radio.setId(id);
+		radio.addListener(this);
 		advanceCursor(radio);
 		return radio;
 	}
 	
-	public Slider addSlider(String name, float minVal, float maxVal, float curVal, String label) {
-		Slider slider = controlP5.addSlider(name, minVal, maxVal, curVal, 0, yCursor, SLIDER_WIDTH, SLIDER_HEIGHT);
+	public Slider addSlider(String name, float minVal, float maxVal, float curVal, String label, int id) {
+		String uniqueName = name + this.hashCode();
+		Slider slider = controlP5.addSlider(uniqueName, minVal, maxVal, curVal, 0, yCursor, SLIDER_WIDTH, SLIDER_HEIGHT);
 		slider.setLabel(label);
 		slider.setGroup(controlGroup.name());
-		slider.plugTo(this);
+		slider.setId(id);
+		slider.addListener(this);
 		advanceCursor(slider);
 		return slider;
 	}
@@ -77,16 +85,21 @@ public class AudioAnalyzerControlPanel implements ControlPanel {
 		yCursor = yCursor + (controller.getHeight() + VERTICAL_SPACER);
 	}
 	
-	public void easingSlider(float newValue) {
-		audioAnalyzer.setEasing(newValue);
-	}
-	
-	public void scaleSlider(float newValue) {
-		audioAnalyzer.setScale(newValue);
-	}
-	
-	public void modeButtons(int newValue) {
-		audioAnalyzer.setMode(newValue);
-		parent.println(audioAnalyzer.getMode());
+	public void controlEvent(ControlEvent event) {
+		int controllerId = event.controller().id();
+		float controllerValue = event.controller().value();
+
+		switch (controllerId) {
+		case MODE_BUTTONS_ID:
+			parent.println("Setting mode:" + controllerValue);
+			audioAnalyzer.setMode( (int) controllerValue );
+			break;
+		case EASING_SLIDER_ID:
+			audioAnalyzer.setEasing(controllerValue);
+			break;
+		case SCALE_SLIDER_ID:
+			audioAnalyzer.setScale(controllerValue);
+			break;
+		}
 	}
 }
