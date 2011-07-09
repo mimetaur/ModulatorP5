@@ -49,7 +49,7 @@ public class OscillatorControlPanel implements ControlPanel, ControlListener {
 	}
 	
 	public void addInitialControls() {
-		addSlider("rateSlider", oscillator.getMinRate(), oscillator.getMaxRate(), oscillator.getRate(), "Rate", RATE_SLIDER_ID);
+		addSlider("rateSlider", oscillator.getMinRate() * 10, oscillator.getMaxRate() * 10, oscillator.getRate() * 10, "Rate", RATE_SLIDER_ID);
 		addSlider("amountSlider", oscillator.MIN_AMOUNT, oscillator.MAX_AMOUNT, oscillator.getAmount(), "Amount", AMOUNT_SLIDER_ID);
 	}
 	
@@ -74,7 +74,7 @@ public class OscillatorControlPanel implements ControlPanel, ControlListener {
 
 		switch (controllerId) {
 		case RATE_SLIDER_ID:
-			oscillator.setRate(controllerValue);
+			oscillator.setRate(controllerValue * 0.1f);
 			break;
 		case AMOUNT_SLIDER_ID:
 			oscillator.setAmount(controllerValue);
